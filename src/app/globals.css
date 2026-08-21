@@ -1,26 +1,177 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   Clean · white · Apple-blue accent
+   White surfaces, neutral grays, one blue accent. No warm tones.
+   ============================================================ */
+
+@theme {
+  /* Palette, white surfaces, neutral grays, Apple-blue accent */
+  --color-paper: #ffffff; /* page base, white */
+  --color-paper-2: #f5f5f7; /* raised surface, Apple light gray */
+  --color-ink: #1d1d1f; /* near-black text */
+  --color-ink-2: #424245;
+  --color-muted: #6e6e73; /* secondary text */
+  --color-line: #d2d2d7; /* hairlines */
+  --color-line-dark: #3a3a3c; /* hairlines on dark */
+  --color-cream-on-ink: #f5f5f7; /* text on any dark surface */
+
+  /* Accent, Apple blue */
+  --color-accent: #0071e3;
+  --color-accent-ink: #0058b8;
+
+  /* Extra editorial accents (used for multicolor statement words) */
+  --color-green: #17a673;
+  --color-pink: #e0479e;
+
+  /* Fonts */
+  --font-display: var(--font-montserrat); /* headlines */
+  --font-sans: var(--font-montserrat); /* body */
+  --font-mono: var(--font-poppins); /* labels ("04, …") + numbers */
+  --font-serif: var(--font-instrument); /* elegant accent italics */
+
+  /* Type scale, editorial, extreme contrast */
+  --text-giga: clamp(4rem, 18vw, 18rem);
+  --text-giga--line-height: 0.82;
+  --text-giga--letter-spacing: -0.045em;
+
+  --text-mega: clamp(3rem, 11vw, 10rem);
+  --text-mega--line-height: 0.88;
+  --text-mega--letter-spacing: -0.04em;
+
+  --text-display: clamp(2.5rem, 7vw, 6rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.03em;
+
+  --text-title: clamp(1.75rem, 3.5vw, 3rem);
+  --text-title--line-height: 1.02;
+  --text-title--letter-spacing: -0.02em;
+
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base ------------------------------------------------------- */
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+::selection {
+  background: var(--color-accent);
+  color: var(--color-paper);
+}
+
+/* Hide native cursor on pointer devices (custom cursor takes over) */
+@media (hover: hover) and (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a,
+  button {
+    cursor: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Utilities -------------------------------------------------- */
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  font-weight: 800;
+}
+
+.accent-italic {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.link-draw {
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+}
+.link-draw:hover {
+  background-size: 100% 2px;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Idle float for the hero avatar */
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-floaty {
+  animation: floaty 5s ease-in-out infinite;
+}
+
+/* Reveal on load */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.rise {
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.rise-2 {
+  animation-delay: 0.08s;
+}
+.rise-3 {
+  animation-delay: 0.16s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-floaty,
+  .rise,
+  .rise-2,
+  .rise-3 {
+    animation: none;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    body,
+    a,
+    button {
+      cursor: auto;
+    }
+  }
 }
